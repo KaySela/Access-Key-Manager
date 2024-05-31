@@ -1,5 +1,4 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
@@ -26,9 +25,13 @@ class SchoolViewSet(ModelViewSet):
             return School.objects.all()
         return School.objects.filter(id=self.request.user.id)
     
-    
+
+
 
 class AccessKeyViewSet(ModelViewSet):
+    
+    http_method_names = ['get','post','patch']
+    
     permission_classes = [IsAdminOrPostReadOnly]
     pagination_class = PageNumberPagination
     
@@ -54,8 +57,15 @@ class AccessKeyViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         access_key = serializer.save()
         serializer = AccessKeySerializer(access_key)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)    
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    
+    def update(self, request, *args, **kwargs):
+        serializer = AccessKeyUpdateSerializer(instance=self.get_object(), data=request.data)
+        serializer.is_valid(raise_exception=True)
+        access_key = serializer.save()
+        serializer = AccessKeySerializer(access_key)
+        return Response(serializer.data, status=status.HTTP_200_OK) 
 
 
 

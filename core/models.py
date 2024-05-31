@@ -7,7 +7,7 @@ from uuid import uuid4
 
 class School(AbstractUser):
     email = models.EmailField(unique=True)
-    username = None
+    username = models.CharField(max_length=10, blank=True, null=True, unique=False)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

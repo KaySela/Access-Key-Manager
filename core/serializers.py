@@ -1,5 +1,6 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from rest_framework import serializers
 
 from .models import School, AccessKey
@@ -53,12 +54,21 @@ class AccessKeySerializer(serializers.ModelSerializer):
         
 
 class AccessKeyUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccessKey
+        fields = ['status']
         
-        class Meta:
-            model = AccessKey
-            fields = ['status']
-            
-        def update(self, instance, validated_data):
-            instance.status = validated_data.get('status', instance.status)
-            instance.save()
-            return instance
+        
+    def validate_status(self, value):
+        if value not in ['expired','revoked']:
+            raise serializers.ValidationError('Invalid status')
+        return value
+    
+    
+    def update(self, instance, validated_data):
+        if validated_data['status'] == 'revoked':
+            instance.revoked_at = timezone.now()
+        instance.status = validated_data['status']
+        instance.save()
+        return instance
+        
