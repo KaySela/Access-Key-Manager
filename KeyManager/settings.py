@@ -148,3 +148,14 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
    "ACCESS_TOKEN_LIFETIME": timedelta(hours=int(ACCESS_TOKEN_LIFETIME)),
 }
+
+AUTH_USER_MODEL = 'core.School'
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'core.serializers.CreateSchoolSerializer',
+        'current_user': 'core.serializers.SchoolSerializer',
+        'user': 'core.serializers.SchoolSerializer',
+    },
+    'PASSWORD_RESET_CONFIRM_URL' : 'auth/users/reset_password_confirm/{uid}/{token}/',
+}
