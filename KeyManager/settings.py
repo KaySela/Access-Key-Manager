@@ -133,6 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -176,7 +177,7 @@ DJOSER = {
 
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
+#CELERY_BROKER_URL = 'redis://localhost:6379/1'
 CELERY_BEAT_SCHEDULE = {
     'check-expired-keys': {
         'task': 'core.tasks.check_expired_keys',
@@ -184,3 +185,31 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
         
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'logs.log',
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console','file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} ({levelname}) - {name} - {message}',
+            'style': '{',
+        }
+    }
+}
+
