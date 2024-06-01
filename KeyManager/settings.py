@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
+from celery.schedules import crontab
 
 
 
@@ -172,3 +173,14 @@ DJOSER = {
     },
     'PASSWORD_RESET_CONFIRM_URL' : 'auth/users/reset_password_confirm/{uid}/{token}/',
 }
+
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_BEAT_SCHEDULE = {
+    'check-expired-keys': {
+        'task': 'core.tasks.check_expired_keys',
+        'schedule': 10
+    },
+}
+        
