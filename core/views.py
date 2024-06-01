@@ -1,7 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 
 
 from .models import School, AccessKey
@@ -65,10 +67,23 @@ class AccessKeyViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         access_key = serializer.save()
         serializer = AccessKeySerializer(access_key)
-        return Response(serializer.data, status=status.HTTP_200_OK) 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
 
 
-
-
+class SchoolActiveKeyView(APIView):
+    http_method_names = ['get']
+    permission_classes = [IsAdminUser]
+    
+    def get(self, request,email,format=None):
+        school = School.objects.filter(email=email).first()
+        if school:
+            active_key = AccessKey.objects.filter(school=school, status='active').first()
+            if not active_key:
+                return Response({'error':'No active key found'}, status=status.HTTP_404_NOT_FOUND)
+            serializer = AccessKeySerializer(active_key)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'error':'School not found'}, status=status.HTTP_404_NOT_FOUND)
 
 

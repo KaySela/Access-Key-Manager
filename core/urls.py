@@ -14,5 +14,6 @@ urlpatterns = [
     
     path('api/v1/', include(router.urls)),
     path('api/v1/', include(school_router.urls)),
+    path('api/v1/activekey/<str:email>/', views.SchoolActiveKeyView.as_view(), name='school-active-key'),
     
 ]
