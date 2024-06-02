@@ -4,3 +4,6 @@ db.sqlite3
 celerybeat-schedule
 logs.log
 static
+.coverage
+.vscode
+.pytest_cache

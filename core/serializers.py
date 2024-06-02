@@ -48,7 +48,7 @@ class AccessKeySerializer(serializers.ModelSerializer):
         school_id = self.context['school_id']
         
         if AccessKey.objects.filter(school_id=school_id, status='active').exists():
-            raise serializers.ValidationError('School already has an active key')
+            raise serializers.ValidationError({'error': 'School already has an active key'})
         key = AccessKey.objects.create(school_id=school_id, **validated_data)
         return key
         
@@ -62,15 +62,15 @@ class AccessKeyUpdateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         status = data.get('status', None)
         if status != "revoked":
-            raise serializers.ValidationError('Invalid status')
+            raise serializers.ValidationError({'error': 'Invalid status'})
         return data
     
     
     def update(self, instance, validated_data):
         if instance.status == 'expired':
-            raise serializers.ValidationError('Key already expired')
+            raise serializers.ValidationError({'error': 'Key already expired'})
         if instance.status == 'revoked':
-            raise serializers.ValidationError('Key already revoked')
+            raise serializers.ValidationError({'error': 'Key already revoked'})
         instance.status = validated_data['status']
         instance.revoked_at = timezone.now()
         instance.save()

@@ -30,12 +30,12 @@ class SchoolViewSet(ModelViewSet):
             return School.objects.all()
         return School.objects.filter(id=self.request.user.id)
     
-    @method_decorator(cache_page(60*15))
+    #@method_decorator(cache_page(60*15))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
     
     
-    @method_decorator(cache_page(60*15))
+    #@method_decorator(cache_page(60*15))
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
@@ -89,12 +89,12 @@ class AccessKeyViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     
-    @method_decorator(cache_page(60*15))
+    #@method_decorator(cache_page(60*15))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
     
     
-    @method_decorator(cache_page(60*15))
+    #@method_decorator(cache_page(60*15))
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
     
