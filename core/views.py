@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 from .models import School, AccessKey
@@ -28,6 +30,14 @@ class SchoolViewSet(ModelViewSet):
             return School.objects.all()
         return School.objects.filter(id=self.request.user.id)
     
+    @method_decorator(cache_page(60*15))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    
+    @method_decorator(cache_page(60*15))
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 
 
@@ -77,6 +87,16 @@ class AccessKeyViewSet(ModelViewSet):
         revoked_key = serializer.save()
         serializer = AccessKeySerializer(revoked_key)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+    @method_decorator(cache_page(60*15))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    
+    @method_decorator(cache_page(60*15))
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
     
     
 

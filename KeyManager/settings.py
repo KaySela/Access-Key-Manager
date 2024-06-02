@@ -177,11 +177,11 @@ DJOSER = {
 
 
 
-#CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
 CELERY_BEAT_SCHEDULE = {
     'check-expired-keys': {
         'task': 'core.tasks.check_expired_keys',
-        'schedule': 10
+        'schedule': crontab(minute=0, hour=0),
     },
 }
         
@@ -213,3 +213,14 @@ LOGGING = {
     }
 }
 
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
