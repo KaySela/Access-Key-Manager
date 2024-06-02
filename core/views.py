@@ -30,12 +30,12 @@ class SchoolViewSet(ModelViewSet):
             return School.objects.all()
         return School.objects.filter(id=self.request.user.id)
     
-    #@method_decorator(cache_page(60*15))
+    @method_decorator(cache_page(60*15))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
     
     
-    #@method_decorator(cache_page(60*15))
+    @method_decorator(cache_page(60*15))
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
@@ -53,9 +53,9 @@ class AccessKeyViewSet(ModelViewSet):
         if self.request.user.is_staff:
             school_id = self.kwargs.get('school_pk', None)
             if school_id:
-                return AccessKey.objects.filter(school_id=self.kwargs['school_pk'])
-            return AccessKey.objects.all()
-        return AccessKey.objects.filter(school_id=self.request.user.id)
+                return AccessKey.objects.select_related('school').filter(school_id=self.kwargs['school_pk'])
+            return AccessKey.objects.select_related('school').all()
+        return AccessKey.objects.select_related('school').filter(school_id=self.request.user.id)
     
     def get_serializer_context(self):
         school_id = self.kwargs.get('school_pk', None)
@@ -89,12 +89,12 @@ class AccessKeyViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     
-    #@method_decorator(cache_page(60*15))
+    @method_decorator(cache_page(60*15))
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
     
     
-    #@method_decorator(cache_page(60*15))
+    @method_decorator(cache_page(60*15))
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
     
@@ -108,9 +108,9 @@ class SchoolActiveKeyView(APIView):
         serializer = SchoolEmailSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email']
-            school = School.objects.filter(email=email).first()
+            school = School.objects.select_related('school').filter(email=email).first()
             if school:
-                active_key = AccessKey.objects.filter(school=school, status='active').first()
+                active_key = AccessKey.objects.select_related('school').filter(school=school, status='active').first()
                 if not active_key:
                     return Response({'error':'No active key found'}, status=status.HTTP_404_NOT_FOUND)
                 serializer = AccessKeySerializer(active_key)
