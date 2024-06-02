@@ -59,16 +59,23 @@ class AccessKeyUpdateSerializer(serializers.ModelSerializer):
         fields = ['status']
         
         
-    def validate_status(self, value):
-        if value not in ['expired','revoked']:
+    def validate(self, data):
+        status = data.get('status', None)
+        if status != "revoked":
             raise serializers.ValidationError('Invalid status')
-        return value
+        return data
     
     
     def update(self, instance, validated_data):
-        if validated_data['status'] == 'revoked':
-            instance.revoked_at = timezone.now()
+        if instance.status == 'expired':
+            raise serializers.ValidationError('Key already expired')
+        if instance.status == 'revoked':
+            raise serializers.ValidationError('Key already revoked')
         instance.status = validated_data['status']
+        instance.revoked_at = timezone.now()
         instance.save()
         return instance
+        
+        
+        
         

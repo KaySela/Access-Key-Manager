@@ -4,7 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 
-router.register('schools', views.SchoolViewSet, basename='users')
+router.register('schools', views.SchoolViewSet, basename='schools')
 router.register('keys', views.AccessKeyViewSet, basename='keys')
 
 school_router = routers.NestedSimpleRouter(router, 'schools', lookup='school')

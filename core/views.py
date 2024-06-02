@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import action
 
 
 from .models import School, AccessKey
@@ -32,7 +33,7 @@ class SchoolViewSet(ModelViewSet):
 
 class AccessKeyViewSet(ModelViewSet):
     
-    http_method_names = ['get','post','patch']
+    http_method_names = ['get','post']
     
     permission_classes = [IsAdminOrPostReadOnly]
     pagination_class = PageNumberPagination
@@ -40,10 +41,16 @@ class AccessKeyViewSet(ModelViewSet):
     
     def get_queryset(self):
         if self.request.user.is_staff:
+            school_id = self.kwargs.get('school_pk', None)
+            if school_id:
+                return AccessKey.objects.filter(school_id=self.kwargs['school_pk'])
             return AccessKey.objects.all()
         return AccessKey.objects.filter(school_id=self.request.user.id)
     
     def get_serializer_context(self):
+        school_id = self.kwargs.get('school_pk', None)
+        if school_id:
+            return {'school_id': school_id}
         return {'school_id': self.request.user.id}
     
     def get_serializer_class(self):
@@ -62,15 +69,16 @@ class AccessKeyViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     
-    def update(self, request, *args, **kwargs):
-        serializer = AccessKeyUpdateSerializer(instance=self.get_object(), data=request.data)
+    @action(detail=True, methods=['post'], url_path='revoke', url_name='revoke', permission_classes=[IsAdminUser])
+    def revoke_key(self, request, pk=None, school_pk=None):
+        access_key = self.get_object()
+        serializer = AccessKeyUpdateSerializer(access_key, data={'status':'revoked'}, partial=True)
         serializer.is_valid(raise_exception=True)
-        access_key = serializer.save()
-        serializer = AccessKeySerializer(access_key)
+        revoked_key = serializer.save()
+        serializer = AccessKeySerializer(revoked_key)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     
-
 
 class SchoolActiveKeyView(APIView):
     http_method_names = ['get']
