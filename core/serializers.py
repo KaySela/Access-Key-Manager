@@ -75,6 +75,11 @@ class AccessKeyUpdateSerializer(serializers.ModelSerializer):
         instance.revoked_at = timezone.now()
         instance.save()
         return instance
+    
+
+class SchoolEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
         
         
         

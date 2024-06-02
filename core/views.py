@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 
 
 from .models import School, AccessKey
-from .serializers import CreateSchoolSerializer, SchoolSerializer, AccessKeySerializer, AccessKeyUpdateSerializer
+from .serializers import CreateSchoolSerializer, SchoolSerializer, AccessKeySerializer, AccessKeyUpdateSerializer, SchoolEmailSerializer
 from .permissions import IsAdminOrPostReadOnly, IsAdminOrReadOnly
 
 
@@ -81,17 +81,21 @@ class AccessKeyViewSet(ModelViewSet):
     
 
 class SchoolActiveKeyView(APIView):
-    http_method_names = ['get']
+    http_method_names = ['post']
     permission_classes = [IsAdminUser]
     
-    def get(self, request,email,format=None):
-        school = School.objects.filter(email=email).first()
-        if school:
-            active_key = AccessKey.objects.filter(school=school, status='active').first()
-            if not active_key:
-                return Response({'error':'No active key found'}, status=status.HTTP_404_NOT_FOUND)
-            serializer = AccessKeySerializer(active_key)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({'error':'School not found'}, status=status.HTTP_404_NOT_FOUND)
+    def post(self, request, format=None):
+        serializer = SchoolEmailSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            school = School.objects.filter(email=email).first()
+            if school:
+                active_key = AccessKey.objects.filter(school=school, status='active').first()
+                if not active_key:
+                    return Response({'error':'No active key found'}, status=status.HTTP_404_NOT_FOUND)
+                serializer = AccessKeySerializer(active_key)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({'error':'School not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
