@@ -21,18 +21,18 @@ Deplyed url: https://access-key-manager-c55r.onrender.com
 
 3. Create a .env file and provide these values
 
-    ACCESS_TOKEN_LIFETIME
-    SECRET_KEY
-    DB_NAME
-    DB_USER
-    DB_PASSWORD
-    DB_HOST
-    DB_PORT
-    MICRO_ADMIN_USER
-    MICRO_ADMIN_PASSWORD
-    EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD
-    REDIS_HOST
+    ACCESS_TOKEN_LIFETIME=
+    SECRET_KEY=
+    DB_NAME=
+    DB_USER=
+    DB_PASSWORD=
+    DB_HOST=
+    DB_PORT=
+    MICRO_ADMIN_USER=
+    MICRO_ADMIN_PASSWORD=
+    EMAIL_HOST_USER=
+    EMAIL_HOST_PASSWORD=
+    REDIS_HOST=
 
 3. Build and run the Docker containers:
     
