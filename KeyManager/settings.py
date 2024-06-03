@@ -184,7 +184,7 @@ CELERY_BEAT_SCHEDULE = {
     'check-expired-keys': {
         'task': 'core.tasks.check_expired_keys',
         'schedule': crontab(minute=0, hour=0),
-        'schedule': 10,
+        #'schedule': 10,
     },
 }
         
