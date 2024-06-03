@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'djoser',
     'core',
 ]
@@ -177,11 +178,12 @@ DJOSER = {
 
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:6379/1"
 CELERY_BEAT_SCHEDULE = {
     'check-expired-keys': {
         'task': 'core.tasks.check_expired_keys',
         'schedule': crontab(minute=0, hour=0),
+        #'schedule': 10,
     },
 }
         
@@ -218,7 +220,7 @@ LOGGING = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
+        "LOCATION": f"redis://{os.getenv('REDIS_HOST')}:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
