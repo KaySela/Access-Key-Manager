@@ -6,4 +6,3 @@ celerybeat-schedule
 .vscode
 .pytest_cache
 logs.log
-static
