@@ -5,3 +5,5 @@ celerybeat-schedule
 .coverage
 .vscode
 .pytest_cache
+logs.log
+static
