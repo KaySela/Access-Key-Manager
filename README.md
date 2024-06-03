@@ -26,13 +26,13 @@ Deplyed url: https://access-key-manager-c55r.onrender.com
     DB_NAME=
     DB_USER=
     DB_PASSWORD=
-    DB_HOST=
-    DB_PORT=
+    DB_HOST=db
+    DB_PORT=5432
     MICRO_ADMIN_USER=
     MICRO_ADMIN_PASSWORD=
     EMAIL_HOST_USER=
     EMAIL_HOST_PASSWORD=
-    REDIS_HOST=
+    REDIS_HOST=redis
 
 3. Build and run the Docker containers:
     
