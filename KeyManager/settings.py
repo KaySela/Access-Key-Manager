@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['accesskey-b3cc.onrender.com']
+ALLOWED_HOSTS = ['access-key-manager-c55r.onrender.com']
 
 
 # Application definition
