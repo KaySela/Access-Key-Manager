@@ -183,8 +183,8 @@ CELERY_BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:6379/1"
 CELERY_BEAT_SCHEDULE = {
     'check-expired-keys': {
         'task': 'core.tasks.check_expired_keys',
-        'schedule': crontab(minute=0, hour=0),
-        #'schedule': 10,
+        'schedule': 10,
+        #'schedule': crontab(minute=0, hour=0),
     },
 }
         
