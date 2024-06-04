@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Create micro-focus admin user'
 
     def handle(self, *args, **options):
-        email = os.getenv('MICRO_ADMIN_USER')
+        email = os.getenv('MICRO_ADMIN_EMAIL')
         password = os.getenv('MICRO_ADMIN_PASSWORD')
 
         if not School.objects.filter(email=email).exists():
