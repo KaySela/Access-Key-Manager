@@ -19,7 +19,7 @@ Deplyed url: https://access-key-manager-c55r.onrender.com
     cd Access-Key-Manager
     
 
-3. Create a .env file and provide these values
+3. Create a .env file and set values, dont change already provided values
 
     ACCESS_TOKEN_LIFETIME=
     SECRET_KEY=
@@ -28,9 +28,9 @@ Deplyed url: https://access-key-manager-c55r.onrender.com
     DB_PASSWORD=
     DB_HOST=db
     DB_PORT=5432
-    MICRO_ADMIN_USER=
+    MICRO_ADMIN_EMAIL=
     MICRO_ADMIN_PASSWORD=
-    EMAIL_HOST_USER=
+    EMAIL_HOST_ADDRESS=
     EMAIL_HOST_PASSWORD=
     REDIS_HOST=redis
 
